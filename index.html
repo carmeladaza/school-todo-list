@@ -3,71 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Hub | Personal Todo</title>
-    
+    <title>School Hub | Dark Mode</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
+        /* CSS VARIABLES: Dito mangyayari ang switch */
         :root {
-            --primary-pink: #ffb7c5;
-            --soft-pink: #ffe4e8;
-            --accent-color: #ff85a2;
-            --text-dark: #5a5a5a;
             --bg-gradient: linear-gradient(135deg, #fff5f7 0%, #f0f4ff 100%);
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --text-color: #5a5a5a;
+            --accent-color: #ff85a2;
+            --input-bg: #ffffff;
+            --li-bg: #ffffff;
+        }
+
+        /* DARK MODE THEME: Pag may class na 'dark-mode' ang body */
+        body.dark-mode {
+            --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --card-bg: rgba(30, 30, 50, 0.9);
+            --text-color: #e0e0e0;
+            --accent-color: #ff9fb6;
+            --input-bg: #2d2d44;
+            --li-bg: #2d2d44;
         }
 
         body {
             background: var(--bg-gradient);
-            color: var(--text-dark);
+            color: var(--text-color);
             font-family: 'Poppins', sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            transition: background 0.5s ease;
         }
 
-        /* The "Glass" Card */
+        /* Toggle Button Style */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+        }
+
         .todo-card {
-            background: rgba(255, 255, 255, 0.8);
+            background: var(--card-bg);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             padding: 40px;
             border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 20px 40px rgba(255, 183, 197, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
             width: 90%;
             max-width: 400px;
-            text-align: center;
+            transition: 0.3s;
         }
 
-        h2 { 
-            font-weight: 600;
-            color: var(--accent-color);
-            margin-bottom: 25px;
-            letter-spacing: -0.5px;
-        }
+        h2 { color: var(--accent-color); text-align: center; }
 
-        .input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
+        .input-group { display: flex; gap: 10px; margin-bottom: 25px; }
 
         input {
             flex: 1;
             padding: 15px;
             border: none;
-            background: white;
+            background: var(--input-bg);
+            color: var(--text-color);
             border-radius: 15px;
             outline: none;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-            font-family: 'Poppins', sans-serif;
             transition: 0.3s;
-        }
-
-        input:focus {
-            box-shadow: 0 0 0 2px var(--primary-pink);
         }
 
         button#add-btn {
@@ -79,86 +87,68 @@
             border-radius: 15px;
             cursor: pointer;
             font-size: 20px;
-            font-weight: bold;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        button#add-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 133, 162, 0.4);
-        }
-
-        ul {
-            padding: 0;
-            margin: 0;
-            list-style: none;
-        }
+        ul { padding: 0; list-style: none; }
 
         li {
-            background: white;
+            background: var(--li-bg);
             margin-bottom: 12px;
             padding: 15px 20px;
             border-radius: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            animation: slideIn 0.4s ease forwards;
-            border-left: 5px solid var(--primary-pink);
-        }
-
-        .task-text {
-            font-size: 0.95rem;
-            color: #666;
-        }
-
-        .delete-btn {
-            background: none;
-            border: none;
-            color: #ffcad4;
-            cursor: pointer;
-            font-size: 1.2rem;
+            border-left: 5px solid var(--accent-color);
             transition: 0.3s;
         }
 
-        .delete-btn:hover {
-            color: #ff4d6d;
-        }
-
-        /* Animations */
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        ::placeholder { color: #ccc; }
+        .delete-btn { background: none; border: none; color: var(--accent-color); cursor: pointer; }
     </style>
 </head>
 <body>
 
+    <button class="theme-toggle" onclick="toggleDarkMode()">🌙</button>
+
     <div class="todo-card">
-        <h2>🌸 My School Vibe</h2>
+        <h2>🌸 School Tasks</h2>
         <div class="input-group">
-            <input type="text" id="taskInput" placeholder="Add a new task...">
+            <input type="text" id="taskInput" placeholder="Add a task...">
             <button id="add-btn" onclick="addTask()">+</button>
         </div>
         <ul id="taskList"></ul>
     </div>
 
     <script>
+        const body = document.body;
         const taskInput = document.getElementById('taskInput');
         const taskList = document.getElementById('taskList');
 
+        // 1. PERSISTENCE: Check if dark mode was enabled before
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            document.querySelector('.theme-toggle').innerText = '☀️';
+        }
+
         let tasks = JSON.parse(localStorage.getItem('vibe_tasks')) || [];
+
+        function toggleDarkMode() {
+            body.classList.toggle('dark-mode');
+            const isDark = body.classList.contains('dark-mode');
+            
+            // I-save ang theme preference
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            
+            // Palitan ang icon
+            document.querySelector('.theme-toggle').innerText = isDark ? '☀️' : '🌙';
+        }
 
         function renderTasks() {
             taskList.innerHTML = '';
             tasks.forEach((task, index) => {
                 const li = document.createElement('li');
                 li.innerHTML = `
-                    <span class="task-text">${task}</span>
+                    <span>${task}</span>
                     <button class="delete-btn" onclick="removeTask(${index})">✦</button>
                 `;
                 taskList.appendChild(li);
@@ -176,21 +166,12 @@
         }
 
         function removeTask(index) {
-            const items = document.querySelectorAll('li');
-            items[index].style.opacity = '0';
-            setTimeout(() => {
-                tasks.splice(index, 1);
-                renderTasks();
-            }, 300);
+            tasks.splice(index, 1);
+            renderTasks();
         }
 
-        taskInput.addEventListener("keypress", (e) => {
-            if (e.key === "Enter") addTask();
-        });
-
-        // Initial Load
+        taskInput.addEventListener("keypress", (e) => { if (e.key === "Enter") addTask(); });
         renderTasks();
     </script>
-
 </body>
-</html>
+</html> 
