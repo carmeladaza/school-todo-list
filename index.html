@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Hub Pro | Elite Edition</title>
+    <title>Ultimate Workspace | CCIS Elite</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -27,41 +27,13 @@
             background: var(--bg);
             color: var(--text);
             font-family: 'Poppins', sans-serif;
-            padding: 40px 20px;
-            transition: 0.4s;
             margin: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-
-        .theme-toggle { position: fixed; top: 20px; right: 20px; cursor: pointer; font-size: 1.5rem; background: none; border: none; z-index: 100;}
-
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h2 { color: var(--primary); margin-bottom: 5px; }
-        #motivation-quote { font-style: italic; font-size: 0.85rem; opacity: 0.8; margin-bottom: 20px; color: var(--primary); }
-
-        .input-card {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            width: 100%;
-            max-width: 650px;
-            margin-bottom: 40px;
-            backdrop-filter: blur(10px);
-        }
-
-        .input-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
-        input, select {
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid rgba(0,0,0,0.05);
-            background: var(--bg);
-            color: var(--text);
-            outline: none;
-            flex: 1;
-            font-family: 'Poppins', sans-serif;
+            transition: 0.4s;
+            min-height: 100vh;
         }
 
         button#add-btn {
@@ -78,6 +50,86 @@
         }
         button#add-btn:hover { transform: translateY(-2px); opacity: 0.9; }
 
+        /* Nav Bar */
+        .nav-bar {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .icon-btn {
+            background: var(--card-bg);
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        /* Settings Sidebar */
+        .settings-panel {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 300px;
+            height: 100%;
+            background: var(--card-bg);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            transition: 0.5s;
+            padding: 30px;
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .settings-panel.open { right: 0; }
+
+        /* Workspace Tabs */
+        .workspace-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab {
+            padding: 8px 18px;
+            border-radius: 15px;
+            cursor: pointer;
+            background: var(--card-bg);
+            border: 2px solid transparent;
+            font-weight: 600;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .tab.active { border-color: var(--primary); color: var(--primary); }
+
+        /* Motivation Section */
+        .header { text-align: center; margin-bottom: 20px; }
+        #motivation-quote { font-style: italic; font-size: 0.85rem; opacity: 0.8; margin-top: 5px; color: var(--primary); min-height: 1.2em; }
+
+        /* Input Card */
+        .input-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 25px;
+            width: 100%;
+            max-width: 650px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .input-row { display: flex; gap: 10px; margin-bottom: 12px; }
+        input, select { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.05); background: var(--bg); color: var(--text); font-family: 'Poppins'; }
+
+        /* Subjects Grid */
         .subjects-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -90,34 +142,23 @@
             background: var(--card-bg);
             border-radius: 25px;
             padding: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.03);
             border-top: 10px solid var(--primary);
-            height: fit-content;
-            position: relative;
+            animation: fadeIn 0.4s ease;
         }
 
-        .progress-container {
-            height: 6px;
-            background: rgba(0,0,0,0.05);
-            border-radius: 10px;
-            margin-bottom: 15px;
-            overflow: hidden;
-        }
-        .progress-bar { height: 100%; background: var(--primary); transition: 0.5s; }
-
-        .subject-box h3 { display: flex; justify-content: space-between; align-items: center; color: var(--primary); margin: 0 0 5px 0; }
-        .subject-box h3 span { font-size: 0.75rem; opacity: 0.7; }
+        .progress-container { height: 6px; background: rgba(0,0,0,0.05); border-radius: 10px; margin-bottom: 15px; overflow: hidden; }
+        .progress-bar { height: 100%; transition: 0.5s; }
 
         .task-item {
             background: var(--bg);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             padding: 15px;
             border-radius: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            border-left: 6px solid transparent;
+            border-left: 5px solid transparent;
             transition: 0.3s;
         }
 
@@ -133,20 +174,56 @@
         .task-item.completed { opacity: 0.5; text-decoration: line-through; filter: grayscale(1); }
         .task-item.completed .status-circle { background: var(--primary); color: white; font-size: 10px; }
 
-        .overdue-badge {
-            background: var(--danger); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 5px; margin-left: 5px;
+        .overdue-badge { background: var(--danger); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 5px; margin-left: 5px; }
+
+        .archive-item { font-size: 0.8rem; padding: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+
+        .empty-state {
+            text-align: center;
+            grid-column: 1 / -1; /* Sinisigurado nito na sakop niya buong width ng grid */
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.8;
+            animation: fadeIn 0.8s ease;
         }
 
-        .empty-state { text-align: center; grid-column: 1 / -1; padding: 60px; }
+        .empty-state h3 {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <button class="theme-toggle" onclick="toggleDarkMode()">🌙</button>
+    <div class="nav-bar">
+        <button class="icon-btn" onclick="toggleDarkMode()">🌙</button>
+        <button class="icon-btn" onclick="toggleSettings()">⚙️</button>
+    </div>
+
+    <div class="settings-panel" id="settingsPanel">
+        <h2 style="color:var(--primary)">Settings</h2>
+        <hr style="opacity:0.2">
+        <h3>📜 History / Archive</h3>
+        <div id="archiveList">No history yet.</div>
+        <br>
+        <button onclick="clearArchive()" style="background:var(--primary); color:white; border:none; padding:12px; border-radius:12px; width:100%; cursor:pointer; font-weight:600;">Clear History</button>
+    </div>
 
     <div class="header">
-        <h2>🌸 School Productivity Hub</h2>
-        <div id="motivation-quote">"One code at a time, future dev!"</div>
+        <h2>🌸 Ultimate Workspace</h2>
+        <div id="motivation-quote">"Loading inspiration..."</div>
+    </div>
+
+    <div class="workspace-tabs" id="workspaceTabs">
+        <div class="tab active" onclick="switchWorkspace('Acads')">Acads</div>
+        <div class="tab" onclick="switchWorkspace('Personal')">Personal</div>
+        <div class="tab" onclick="switchWorkspace('Hobbies')">Hobbies</div>
     </div>
 
     <div class="input-card">
@@ -161,21 +238,25 @@
                 <option value="Medium" selected>Medium Priority</option>
                 <option value="High">High Priority</option>
             </select>
+            <input type="color" id="subjectColor" value="#ff85a2" title="Pick Subject Color" style="flex:0.2; height:48px; border-radius:10px; cursor:pointer;">
         </div>
-        <button id="add-btn" onclick="addTask()">Add Task</button>
+        <button id="add-btn" onclick="addTask()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:15px; font-weight:600; cursor:pointer; font-size:1rem;">Add to List</button>
     </div>
 
     <div id="subjectsContainer" class="subjects-container"></div>
 
     <script>
-        let tasks = JSON.parse(localStorage.getItem('vibe_elite_tasks')) || [];
-        
+        let tasks = JSON.parse(localStorage.getItem('mega_tasks_v3')) || [];
+        let archive = JSON.parse(localStorage.getItem('mega_archive_v3')) || [];
+        let currentWorkspace = 'Acads';
+        let subjectColors = JSON.parse(localStorage.getItem('mega_colors_v3')) || {};
+
         const quotes = [
             "Kaya mo 'yan, CCIS represent! 🌸",
             "Future Software Developer in the making! 💻",
-            "One step at a time, one task at a time.",
+            "One code at a time, one task at a time.",
             "Mag-pahinga pero 'wag susuko. ✨",
-            "Believe in your logic, trust your process.",
+            "Trust your logic, trust your process.",
             "Aesthetic and productive? That's you! 💅",
             "Girl you can't be broke and dumb at the same time! 😎",
             "LOCK THE FUCK IN",
@@ -184,18 +265,21 @@
 
         function toggleDarkMode() {
             const isDark = document.body.classList.toggle('dark-mode');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            document.querySelector('.theme-toggle').innerText = isDark ? '☀️' : '🌙';
+            localStorage.setItem('mega_theme', isDark ? 'dark' : 'light');
         }
 
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
-            document.querySelector('.theme-toggle').innerText = '☀️';
-        }
+        if (localStorage.getItem('mega_theme') === 'dark') document.body.classList.add('dark-mode');
+
+        function toggleSettings() { document.getElementById('settingsPanel').classList.toggle('open'); }
 
         function setRandomQuote() {
-            const quoteElem = document.getElementById('motivation-quote');
-            quoteElem.innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+            document.getElementById('motivation-quote').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+        }
+
+        function switchWorkspace(ws) {
+            currentWorkspace = ws;
+            document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.innerText === ws));
+            render();
         }
 
         function addTask() {
@@ -203,102 +287,98 @@
             const subject = document.getElementById('subjectName').value || "General";
             const date = document.getElementById('deadline').value;
             const priority = document.getElementById('priority').value;
+            const color = document.getElementById('subjectColor').value;
 
             if (!name) return;
 
-            tasks.push({
-                id: Date.now(),
-                name,
-                subject,
-                date,
-                priority,
-                done: false,
-                initial: true // Flag to track original tasks for stats
-            });
+            subjectColors[subject] = color;
+            tasks.push({ id: Date.now(), name, subject, date, priority, workspace: currentWorkspace, done: false });
 
             document.getElementById('taskName').value = '';
             document.getElementById('subjectName').value = '';
             document.getElementById('deadline').value = '';
+            localStorage.setItem('mega_colors_v3', JSON.stringify(subjectColors));
             render();
         }
 
         function toggleTask(id) {
             const task = tasks.find(t => t.id === id);
             if (task) task.done = !task.done;
-            
-            // Logic: Auto-remove only if EVERYTHING in subject is done
-            const subjectTasks = tasks.filter(t => t.subject === task.subject);
-            if (subjectTasks.every(t => t.done)) {
-                tasks = tasks.filter(t => t.subject !== task.subject);
+
+            // Auto-archive if subject is finished
+            const subTasks = tasks.filter(t => t.subject === task.subject && t.workspace === task.workspace);
+            if (subTasks.every(t => t.done)) {
+                archive.push(...subTasks);
+                tasks = tasks.filter(t => t.subject !== task.subject || t.workspace !== task.workspace);
             }
             render();
         }
 
+        function clearArchive() { archive = []; render(); }
+
         function isOverdue(dateString) {
             if (!dateString) return false;
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+            const today = new Date(); today.setHours(0,0,0,0);
             return new Date(dateString) < today;
         }
 
         function render() {
             const container = document.getElementById('subjectsContainer');
+            const archiveCont = document.getElementById('archiveList');
             container.innerHTML = '';
             setRandomQuote();
+            
+            // Archive Render
+            archiveCont.innerHTML = archive.length ? archive.map(a => `<div class="archive-item">✅ ${a.name} <small>(${a.subject})</small></div>`).reverse().join('') : "No history yet.";
 
-            if (tasks.length === 0) {
-                container.innerHTML = `<div class="empty-state"><h3>✨ All clear! Enjoy your break! 🌸</h3></div>`;
-                localStorage.setItem('vibe_elite_tasks', JSON.stringify(tasks));
-                return;
-            }
-
-            const groups = tasks.reduce((acc, task) => {
-                if (!acc[task.subject]) acc[task.subject] = [];
-                acc[task.subject].push(task);
-                return acc;
-            }, {});
-
+            // Filter & Sort Logic
+            const wsTasks = tasks.filter(t => t.workspace === currentWorkspace);
             const pMap = { "High": 1, "Medium": 2, "Low": 3 };
 
-            for (const subject in groups) {
-                // ETO YUNG MULTI-LEVEL SORTING
-                groups[subject].sort((a, b) => {
-                    if (a.done !== b.done) return a.done ? 1 : -1;
-                    return pMap[a.priority] - pMap[b.priority];
-                });
+            if (wsTasks.length === 0) {
+                container.innerHTML = `<div class="empty-state"><h3>✨ All clear in ${currentWorkspace}! Time for a break! 🌸</h3></div>`;
+            } else {
+                const groups = wsTasks.reduce((acc, t) => {
+                    if (!acc[t.subject]) acc[t.subject] = [];
+                    acc[t.subject].push(t);
+                    return acc;
+                }, {});
 
-                const doneCount = groups[subject].filter(t => t.done).length;
-                const totalCount = groups[subject].length;
-                const progress = (doneCount / totalCount) * 100;
+                for (const sub in groups) {
+                    groups[sub].sort((a, b) => {
+                        if (a.done !== b.done) return a.done ? 1 : -1;
+                        return pMap[a.priority] - pMap[b.priority];
+                    });
 
-                const box = document.createElement('div');
-                box.className = 'subject-box';
-                const colors = ['#ff85a2', '#a2d2ff', '#c8b6ff', '#ffd6a5'];
-                box.style.borderColor = colors[Math.abs(subject.length) % colors.length];
+                    const doneCount = groups[sub].filter(t => t.done).length;
+                    const totalCount = groups[sub].length;
+                    const subColor = subjectColors[sub] || 'var(--primary)';
 
-                box.innerHTML = `
-                    <h3>${subject} <span>${doneCount}/${totalCount}</span></h3>
-                    <div class="progress-container">
-                        <div class="progress-bar" style="width: ${progress}%"></div>
-                    </div>
-                    <div>
-                        ${groups[subject].map(task => {
-                            const overdue = !task.done && isOverdue(task.date);
-                            return `
-                                <div class="task-item priority-${task.priority} ${task.done ? 'completed' : ''}" onclick="toggleTask(${task.id})">
-                                    <div class="task-info">
-                                        <strong>${task.name} ${overdue ? '<span class="overdue-badge">Overdue!</span>' : ''}</strong>
-                                        <small>${task.date ? '📅 ' + task.date : 'No deadline'} | ${task.priority}</small>
-                                    </div>
-                                    <div class="status-circle">${task.done ? '✓' : ''}</div>
+                    const box = document.createElement('div');
+                    box.className = 'subject-box';
+                    box.style.borderColor = subColor;
+                    
+                    box.innerHTML = `
+                        <h3 style="color:${subColor}">${sub} <span>${doneCount}/${totalCount}</span></h3>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width:${(doneCount/totalCount)*100}%; background:${subColor}"></div>
+                        </div>
+                        ${groups[sub].map(t => `
+                            <div class="task-item priority-${t.priority} ${t.done ? 'completed' : ''}" onclick="toggleTask(${t.id})">
+                                <div class="task-info">
+                                    <strong>${t.name} ${(!t.done && isOverdue(t.date)) ? '<span class="overdue-badge">Overdue!</span>' : ''}</strong>
+                                    <small>${t.date ? '📅 ' + t.date : 'No deadline'} | ${t.priority}</small>
                                 </div>
-                            `;
-                        }).join('')}
-                    </div>
-                `;
-                container.appendChild(box);
+                                <div class="status-circle" style="border-color:${subColor}">${t.done ? '✓' : ''}</div>
+                            </div>
+                        `).join('')}
+                    `;
+                    container.appendChild(box);
+                }
             }
-            localStorage.setItem('vibe_elite_tasks', JSON.stringify(tasks));
+
+            localStorage.setItem('mega_tasks_v3', JSON.stringify(tasks));
+            localStorage.setItem('mega_archive_v3', JSON.stringify(archive));
         }
 
         render();
